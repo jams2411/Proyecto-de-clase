@@ -32,17 +32,18 @@ public class SimpleIcasaComponentHeater implements DeviceListener{
 	@Requires(id="coolers")
 	private Cooler[] coolers;
 	
-	private Thread modifyHeatersThread;
 	
 	@Bind(id="thermometers")
 	protected void bindThermometer(Thermometer thermometer) {
 		thermometer.addListener(this);
+		System.out.println("Escucha el evento");
 	}
 	
 	@Unbind(id="thermometers")
 	protected void unbindThermometers(Thermometer thermometer)
 	{
 		thermometer.removeListener(this);
+		System.out.println("Deja de escuchar el evento");
 	}
 
 	protected List<Heater> getHeaters() {
@@ -66,8 +67,8 @@ public class SimpleIcasaComponentHeater implements DeviceListener{
 	
 	@Invalidate
 	public void stop() throws InterruptedException {
-		modifyHeatersThread.interrupt();
-		modifyHeatersThread.join();
+		/*modifyHeatersThread.interrupt();
+		modifyHeatersThread.join();*/
 	}
 
 	
@@ -115,7 +116,7 @@ public class SimpleIcasaComponentHeater implements DeviceListener{
 				for (Heater heater : heaters) {
 					if(heater.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME) == device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME))
 					{
-						heater.setPowerLevel(0.2);
+						heater.setPowerLevel(1.0);
 						for (Cooler cooler : coolers)
 						{
 							if(cooler.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME) == device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME))
@@ -132,7 +133,7 @@ public class SimpleIcasaComponentHeater implements DeviceListener{
 				{
 					if(cooler.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME) == device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME))
 					{
-						cooler.setPowerLevel(0.2);
+						cooler.setPowerLevel(1.0);
 						for (Heater heater : heaters)
 						{
 							if(heater.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME) == device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME))
